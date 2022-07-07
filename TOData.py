@@ -184,9 +184,10 @@ class ReadTOData:
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Tests Tracking", header=3)
         # For reading QL SBZ REL Tests Tracking
         # print(f"{read_data.loc[18, 'Unique Identification No.']} didnt work")
-        if read_data[read_data["Unique Identification No."] == project_id].values[0][3] == project_id:
-            print(f"{project_id} is already written in test tracking")
-        else:
+        try:
+            if read_data[read_data["Unique Identification No."] == project_id].values[0][3] == project_id:
+                print(f"{project_id} is already written in test tracking")
+        except IndexError:
             # print(f'{len(read_data["Unique Identification No."])}')
             def add_data(index):
 
