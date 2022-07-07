@@ -21,5 +21,5 @@ new_project.create_folder_structure(current_data)
 database(current_data)
 
 # print(current_data)
-# str(current_data["ProjectID"])
-new_project.complete_test_tracking("R02110")
+
+new_project.complete_test_tracking(current_data["ProjectID"])
