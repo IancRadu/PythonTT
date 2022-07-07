@@ -136,7 +136,7 @@ class ReadTOData:
                 ": Test Plan version date: "),
             "TestFlow": get_test(),
             "DeviationDetails": pydash.get(my_doc_as_json,
-                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE').strip(
+                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE','N/A').strip(
                 "Deviation details"),
             "ProjectTrackingData": self.get_project_tracking_data(
                 pydash.get(my_doc_as_json, 'VALUE.0.VALUE.1.VALUE.0.VALUE', f'{self.test_order_file_name[0:6]}')),
@@ -179,16 +179,16 @@ class ReadTOData:
         return project_tracking
 
     def complete_test_tracking(self, project_id):
-        # Fore reading QL SBZ REL Tests Tracking
+
         current_occupied_index = 4
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Tests Tracking", header=3)
-        print(f"{read_data.loc[18, 'Unique Identification No.']} didnt work")
+        # For reading QL SBZ REL Tests Tracking
+        # print(f"{read_data.loc[18, 'Unique Identification No.']} didnt work")
         if read_data[read_data["Unique Identification No."] == project_id].values[0][3] == project_id:
             print(f"{project_id} is already written in test tracking")
-
+        else:
             # print(f'{len(read_data["Unique Identification No."])}')
             def add_data(index):
-
 
                 wb.sheets["QL SBZ REL Tests Tracking"][f'C{index + 5}'].value = \
                     self.project_data["ProjectTrackingData"][
@@ -196,12 +196,13 @@ class ReadTOData:
                 wb.sheets["QL SBZ REL Tests Tracking"][f'D{index + 5}'].value = self.project_data["ProjectID"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'E{index + 5}'].value = self.project_data["ProjectName"]
                 if self.project_data["ProjectID"] in self.project_data["TestFlow"][key]["TestNo"]:
-                     wb.sheets["QL SBZ REL Tests Tracking"][f'F{index + 5}'].value = self.project_data["TestFlow"][key][
-                    "TestNo"]
+                    wb.sheets["QL SBZ REL Tests Tracking"][f'F{index + 5}'].value = self.project_data["TestFlow"][key][
+                        "TestNo"]
                 else:
                     wb.sheets["QL SBZ REL Tests Tracking"][
                         f'F{index + 5}'].value = f'{self.project_data["ProjectID"]}{self.project_data["TestFlow"][key]["TestNo"]}'
-                wb.sheets["QL SBZ REL Tests Tracking"][f'G{index + 5}'].value = self.project_data["ProjectTrackingData"]["Phase"]
+                wb.sheets["QL SBZ REL Tests Tracking"][f'G{index + 5}'].value = \
+                self.project_data["ProjectTrackingData"]["Phase"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'H{index + 5}'].value = self.project_data["TestFlow"][key][
                     "Test name"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'I{index + 5}'].value = \
@@ -218,17 +219,13 @@ class ReadTOData:
                 else:
                     wb.sheets["QL SBZ REL Tests Tracking"][f'P{index + 5}'].value = \
                         self.project_data["ProjectEngineer"]["Name"]
-                xw.Range(f"{index+6}:{index+6}").insert("down")
-
-
-
+                xw.Range(f"{index + 6}:{index + 6}").insert("down")
 
             for i in range(current_occupied_index, len(read_data["Unique Identification No."])):
-                # If cell from column Uniq Ident No is empty, return first empty row number
+                # If cell from column "Uniq Ident No" is empty, return first empty row number
                 if pd.isnull(read_data.loc[i, 'Unique Identification No.']):
-                    print(i)
-                    # read_data.at[353,'Unique Identification No.'] = 10
-                    # print(read_data['Unique Identification No.'][353])
+                    # print(i)
+
                     wb = xw.Book(self.output_location)
                     for key in self.project_data["TestFlow"]:
                         add_data(i)
@@ -238,14 +235,3 @@ class ReadTOData:
                     return "Test tracking done"
                 # break
 
-                #     print(i)
-                # else:
-                #     print(f"else{i}")
-        else:
-            print("2")
-            # print(f'{len(read_data["Unique Identification No."])}')
-            # for i in range(current_occupied_index, len(read_data["Unique Identification No."])):
-            #     if  read_data.isnull[i,'Unique Identification No.']:
-            #        print(i)
-            #     else:
-            #         print(f"else{i}")
