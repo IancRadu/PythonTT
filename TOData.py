@@ -30,7 +30,7 @@ class ReadTOData:
         # coerce to JSON using the standard options
         my_doc_as_json = simplify(my_doc)
 
-        # print(my_doc_as_json)
+        print(my_doc_as_json)
         # get location of all important values from my_doc_as_json using http://jsonviewer.stack.hu/
 
         def get_test():
@@ -128,7 +128,7 @@ class ReadTOData:
                         pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A'),
                         pydash.get(
                             my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.1.VALUE', 'N\A').strip(
-                            " ")]},"Result":"s"},
+                            " ")]},"Reason/details":pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A').replace('Reason/details:',''),"Result":"Add_Function_To_Get_qualification_phase"},
             "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').strip(
                 "TestPlanName : Test Plan (Qualification Program / Test Specification):"),
             "TestPlanVersionDate": pydash.get(my_doc_as_json,
