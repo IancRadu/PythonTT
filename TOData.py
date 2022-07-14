@@ -3,7 +3,7 @@ import pathlib
 # Used to acces elements found in source word document
 import docx
 from simplify_docx import simplify
-# pydash ne permite sa accesam o valoare dintr-un dict sau list priun utilizarea . (punctului) pentru cale
+# pydash ne permite sa accesam o valoare dintr-un dict sau list prin utilizarea . (punctului) pentru cale
 import pydash
 # To get the path of the file
 from tkinter import filedialog
@@ -31,6 +31,7 @@ class ReadTOData:
         my_doc_as_json = simplify(my_doc)
 
         print(my_doc_as_json)
+
         # get location of all important values from my_doc_as_json using http://jsonviewer.stack.hu/
 
         def get_test():
@@ -61,7 +62,7 @@ class ReadTOData:
                     "TestNo":
                         pydash.get(my_doc_as_json,
                                    f'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.0.VALUE.{i}.VALUE.5.VALUE.0.VALUE.0.VALUE',
-                                   'N\A').replace(" ", ""), }
+                                   'N\A').replace(" ", "").replace("{", "").replace("}", ""), }
             return test_list
 
         self.project_data = {
@@ -128,7 +129,9 @@ class ReadTOData:
                         pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A'),
                         pydash.get(
                             my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.1.VALUE', 'N\A').strip(
-                            " ")]},"Reason/details":pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A').replace('Reason/details:',''),"Result":"Add_Function_To_Get_qualification_phase"},
+                            " ")]},
+                "Reason_details": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE',
+                                            '').replace('Reason/details:', ''),},
             "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').strip(
                 "TestPlanName : Test Plan (Qualification Program / Test Specification):"),
             "TestPlanVersionDate": pydash.get(my_doc_as_json,
@@ -136,7 +139,7 @@ class ReadTOData:
                 ": Test Plan version date: "),
             "TestFlow": get_test(),
             "DeviationDetails": pydash.get(my_doc_as_json,
-                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE','N/A').strip(
+                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE', 'N.A.').strip(
                 "Deviation details"),
             "ProjectTrackingData": self.get_project_tracking_data(
                 pydash.get(my_doc_as_json, 'VALUE.0.VALUE.1.VALUE.0.VALUE', f'{self.test_order_file_name[0:6]}')),
@@ -174,7 +177,7 @@ class ReadTOData:
             "Phase": read_data[read_data.Column1 == project_id].values[0][11],
             "ValidationEngineer": read_data[read_data.Column1 == project_id].values[0][18],
             "TestEngineer": read_data[read_data.Column1 == project_id].values[0][19]
-            }
+        }
 
         return project_tracking
 
@@ -203,7 +206,7 @@ class ReadTOData:
                     wb.sheets["QL SBZ REL Tests Tracking"][
                         f'F{index + 5}'].value = f'{self.project_data["ProjectID"]}{self.project_data["TestFlow"][key]["TestNo"]}'
                 wb.sheets["QL SBZ REL Tests Tracking"][f'G{index + 5}'].value = \
-                self.project_data["ProjectTrackingData"]["Phase"]
+                    self.project_data["ProjectTrackingData"]["Phase"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'H{index + 5}'].value = self.project_data["TestFlow"][key][
                     "Test name"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'I{index + 5}'].value = \
@@ -235,4 +238,3 @@ class ReadTOData:
                     wb.close()
                     return "Test tracking done"
                 # break
-
