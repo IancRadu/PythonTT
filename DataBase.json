@@ -1,4 +1,9 @@
 {
+    "doc_path": {
+        "eq_configuration": "C:\\Users\\iancr\\OneDrive - Continental AG\\JavaScript Projects\\Python_TT\\EQ_configuration.xlsx",
+        "planning": "C:\\Users\\iancr\\OneDrive - Continental AG\\TRApp\\A-13 Planning\\CAP1013201-F13 Equipment Planning_20210222.xlsx",
+        "output_location": "C:\\Users\\iancr\\OneDrive - Continental AG\\JavaScript Projects\\Python_TT\\CA 1014449-A13 QL SBZ REL Projects and Tests Tracking Overview.xlsx"
+    },
     "R02074": {
         "ProjectID": "R02074",
         "ProjectName": "CCN S2 Asia_VOL_SPA2_22_TCM_TRM",

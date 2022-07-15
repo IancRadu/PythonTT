@@ -9,7 +9,7 @@ import pydash
 from tkinter import filedialog
 # To read data from xslx file
 import pandas as pd
-
+import database
 
 class ReadTOData:
 
@@ -18,7 +18,7 @@ class ReadTOData:
         self.path = pathlib.PureWindowsPath(filedialog.askopenfile().name)
         # self.path ='./R03908_20220607_V02.docx' #TODO change with good one later from above
         self.test_order_file_name = pathlib.PurePath(self.path).name
-        self.output_location = './CA 1014449-A13 QL SBZ REL Projects and Tests Tracking Overview.xlsx'  # TODO change with good one later
+        self.output_location = database.load_database()['doc_path']['output_location']
         # print(current_data)
 
         self.project_data = {}
