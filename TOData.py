@@ -132,8 +132,8 @@ class ReadTOData:
                             " ")]},
                 "Reason_details": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE',
                                             '').replace('Reason/details:', ''),},
-            "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').strip(
-                "TestPlanName : Test Plan (Qualification Program / Test Specification):"),
+            "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').replace(
+                'Test Plan (Qualification Program / Test Specification):', ' ').strip(),
             "TestPlanVersionDate": pydash.get(my_doc_as_json,
                                               'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.2.VALUE.0.VALUE').strip(
                 ": Test Plan version date: "),
