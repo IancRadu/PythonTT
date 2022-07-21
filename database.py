@@ -35,10 +35,10 @@ def database(object):
     if all_projects is None:
         all_projects = {object['ProjectID']: object}
         upload_database(all_projects)
-        print(all_projects)
+        # print(all_projects)
         return all_projects
     else:
         all_projects[f"{object['ProjectID']}"] = object
         upload_database(all_projects)
-        print(all_projects)
+        # print(all_projects)
         return all_projects

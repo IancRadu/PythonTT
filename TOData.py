@@ -30,7 +30,7 @@ class ReadTOData:
         # coerce to JSON using the standard options
         my_doc_as_json = simplify(my_doc)
 
-        print(my_doc_as_json)
+        # print(my_doc_as_json) # All the data read from Test Order
 
         # get location of all important values from my_doc_as_json using http://jsonviewer.stack.hu/
 
@@ -161,7 +161,7 @@ class ReadTOData:
             for i in range(0, len(folder_names)):
                 pathlib.Path(f'{self.path.parent.parent}\\02_RAW DATA\\{name}\\{folder_names[i]}').mkdir(parents=True,
                                                                                                          exist_ok=True)
-
+                self.project_data["TestFlow"][key][f"Pathto{folder_names[i]}"] = f'{self.path.parent.parent}\\02_RAW DATA\\{name}\\{folder_names[i]}'
         for key in project_data["TestFlow"]:
             if project_data["ProjectID"] in project_data["TestFlow"][key]["TestNo"]:
                 create_folders(project_data["TestFlow"][key]["TestNo"])
@@ -171,7 +171,7 @@ class ReadTOData:
     def get_project_tracking_data(self, project_id):
         # For reading Project Tracking data
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Projects Tracking", header=4)
-        print(project_id)
+        print(f'You have selected Test Order with ID: {project_id}')
         project_tracking = {
             "BA": read_data[read_data.Column1 == project_id].values[0][6],
             "Phase": read_data[read_data.Column1 == project_id].values[0][11],

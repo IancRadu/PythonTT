@@ -5,10 +5,11 @@ import pandas as pd
 import datetime
 import database
 from docx.shared import Mm
-
+from test_method import test_method
 # Path to the template used
 tpl = DocxTemplate('./Template/TemplateRaport.docx')
 
+# Assign path to general files to variable
 planning = database.load_database()['doc_path']['planning']
 output_location = database.load_database()['doc_path']['output_location']
 eq_configuration = database.load_database()['doc_path']['eq_configuration']
@@ -44,54 +45,60 @@ def add_test_start_end(data, report_number):
 
 #
 def get_chamber_data(data, planning, report_number):
-    # Check equipment planning and return chamber name on which testis planned
+    # Check equipment planning and return chamber name on which test is planned
     read_data = pd.read_excel(planning, "ENV2020", header=5)
     all_data = read_data.to_dict()
-    print(data["ProjectID"])
-    print(data["TestFlow"][report_number]["Test name"])
+    print(f'Test report for {data["ProjectID"]}: {data["TestFlow"][report_number]["Test name"]} is being created.')
+
     def sub_function():
+
         for i in range(0, len(all_data)):
             for m in range(0, len(all_data[f"Unnamed: {i}"])):
                 try:
                     if data["ProjectID"] in all_data[f"Unnamed: {i}"][m]:
                         if data["TestFlow"][report_number]["Test name"] in all_data[f"Unnamed: {i}"][m]:
                             chamber_planned = all_data[f"Unnamed: {i}"][0]
-                            # print(chamber_planned[:4])
+                            # print(f"Test was planned on chamber: {chamber_planned[:4]}")
                             # get chamber data for test report
-                            read_data = pd.read_excel(eq_configuration, f"{chamber_planned[:4]}", header=1)
+                            read_data_chamber = pd.read_excel(eq_configuration, f"{chamber_planned[:4]}", header=1)
                             eq_cfg = {'Chamber': chamber_planned[:4],
-                                      'Temp_system_name': read_data['Equipment Name'][0],
-                                      'Temp_system_inv': read_data['Inventory/Serial No'][0],
-                                      'Temp_system_calib': read_data['Calibration ID/Due date'][0],
-                                      'Temp_system_qlsbz': read_data['Remarks'][0],
-                                      'Ahlborn_name': read_data['Equipment Name'][1],
-                                      'Ahlborn_inv': read_data['Inventory/Serial No'][1],
-                                      'Ahlborn_calib': read_data['Calibration ID/Due date'][1],
-                                      'Ahlborn_qlsbz': read_data['Remarks'][1],
-                                      'Sensor_name': read_data['Equipment Name'][2],
-                                      'Sensor_inv': read_data['Inventory/Serial No'][2],
-                                      'Sensor_calib': read_data['Calibration ID/Due date'][2],
-                                      'Sensor_qlsbz': read_data['Remarks'][2],
+                                      'Temp_system_name': read_data_chamber['Equipment Name'][0],
+                                      'Temp_system_inv': read_data_chamber['Inventory/Serial No'][0],
+                                      'Temp_system_calib': read_data_chamber['Calibration ID/Due date'][0],
+                                      'Temp_system_qlsbz': read_data_chamber['Remarks'][0],
+                                      'Ahlborn_name': read_data_chamber['Equipment Name'][1],
+                                      'Ahlborn_inv': read_data_chamber['Inventory/Serial No'][1],
+                                      'Ahlborn_calib': read_data_chamber['Calibration ID/Due date'][1],
+                                      'Ahlborn_qlsbz': read_data_chamber['Remarks'][1],
+                                      'Sensor_name': read_data_chamber['Equipment Name'][2],
+                                      'Sensor_inv': read_data_chamber['Inventory/Serial No'][2],
+                                      'Sensor_calib': read_data_chamber['Calibration ID/Due date'][2],
+                                      'Sensor_qlsbz': read_data_chamber['Remarks'][2],
                                       }
+
                             return eq_cfg
                 except TypeError:
                     continue
+
     if sub_function() is None:
-        eq_cfg = {'Chamber': "CC??",
-                  'Temp_system_name': 'Name of test not found in planning',
-                  'Temp_system_inv': 'Ask Gurghean Radu to  ',
-                  'Temp_system_calib': 'use the same names',
-                  'Temp_system_qlsbz': 'as specified in TO',
-                  'Ahlborn_name': 'N.A.',
-                  'Ahlborn_inv': 'N.A.',
-                  'Ahlborn_calib': 'N.A.',
-                  'Ahlborn_qlsbz': 'N.A.',
-                  'Sensor_name': 'N.A.',
-                  'Sensor_inv': 'N.A.',
-                  'Sensor_calib': 'N.A.',
-                  'Sensor_qlsbz': 'N.A.',
-                  }
-        return eq_cfg
+        print("Name of test was not found in planning")
+        eq_cfg_empty = {'Chamber': "CC??",
+                        'Temp_system_name': 'Name of test was not found in planning',
+                        'Temp_system_inv': 'Ask Gurghean Radu to  ',
+                        'Temp_system_calib': 'use the same names',
+                        'Temp_system_qlsbz': 'as specified in TO',
+                        'Ahlborn_name': 'N.A.',
+                        'Ahlborn_inv': 'N.A.',
+                        'Ahlborn_calib': 'N.A.',
+                        'Ahlborn_qlsbz': 'N.A.',
+                        'Sensor_name': 'N.A.',
+                        'Sensor_inv': 'N.A.',
+                        'Sensor_calib': 'N.A.',
+                        'Sensor_qlsbz': 'N.A.',
+                        }
+        return eq_cfg_empty
+    else:
+        return sub_function()
 # Search for picture at given path and return path if picture_name is at that path else return first picture.
 def get_picture(path_to_picture_extended, name, picture_name):
     data = f'{path_to_picture_extended}/{name}/'
@@ -104,7 +111,8 @@ def get_picture(path_to_picture_extended, name, picture_name):
             if picture_name in str(child):
                 return child
             elif 'png' or 'jpg' in str(child):
-                print(f"No picture found with name: {picture_name}. First picture was returned")
+                print(f"No picture found with name: {picture_name}. First picture in the file was returned.")
+                # print(str(child))
                 return child
 
     if sub_get_picture() is None:
@@ -113,25 +121,52 @@ def get_picture(path_to_picture_extended, name, picture_name):
     else:
         return sub_get_picture()
 
+# Format text read from QP
+def standards_text_format(qp_text):
+    # print(qp_text)
+    if 'Failed to read standards.' in qp_text:
+        return 'Failed to read standards.'
+    else:
+        new_text = qp_text[0].split(':',1)[1].replace("  ", "").replace(" -","-").replace("- ", "").replace(" ;",";")
+        # print(new_text)
+        return new_text
+
+
+# Add QP snipping to the Test Report
+def add_snipping(data, report_number, info_to_replace):
+    info_to_replace["Snipping"] = []
+    for i in range(0, len(data["TestFlow"][report_number]["QP_read_pages"])):
+        # checks if value from qp_read_pages is equal with 1 and if there are more numbers. this means that we don't need first page.
+        # if we let ["QP_read_pages"]) >= 1, page 1 will never be returned. To change this make > 1.
+        if 1 == data["TestFlow"][report_number]["QP_read_pages"][i] and len(data["TestFlow"][report_number]["QP_read_pages"]) >= 1:
+            info_to_replace["Snipping"].append({"Snipping": "Failed to read page."})
+            continue
+        else:
+            info_to_replace["Snipping"].append({"Snipping": InlineImage(tpl,
+                                                                   f'{data["TestFlow"][report_number]["Pathto04_Snipping"]}/{data["TestFlow"][report_number]["QP_read_pages"][i]}.png',
+                                                                   width=Mm(150), height=Mm(193)),},)
+    # print(info_to_replace['Snipping'])
 
 def create_report(project_id, report_number):
     # Load Project ID information from database
     data = database.load_database()[project_id]
     # Get chamber data information
     chamber_data = get_chamber_data(data, planning, report_number)
-    print(chamber_data)
+    # Format text received after reading qp standard
+
+    # print(chamber_data)
+    # print(f'Values from climatic chamber are {chamber_data}')
     data_TT = add_test_start_end(data, report_number)
     # Variable used to select the pictures in the folders
     path_to_picture = pathlib.Path(data['PathtoTO']).parent.parent
     path_to_picture_extended = f'{path_to_picture}/02_RAW DATA/{data["TestFlow"][report_number]["TestNo"]}'
-    print(data)
+    # print(data)
 
     def deviation_details_specific():
         if str(data["TestFlow"][report_number]["Test name"]) in str(data["DeviationDetails"]):
             return data["DeviationDetails"]
         else:
             return 'N.A.'
-
     # Data which appear in the Test Report Template
     info_to_replace = {
         # --------------------------------Header------------------------------------------------------------
@@ -157,9 +192,11 @@ def create_report(project_id, report_number):
         # --------------------------------Second Page---------------------------------------------------------
         'Test_name': data["TestFlow"][report_number]["Test name"],
         'ChaperNo': data["TestFlow"][report_number]["ChaperNo"],
+        'Test_method':test_method(str(data["TestFlow"][report_number]["Test name"])),
         'TestPlanName': data["TestPlanName"],
         'TestPlanVersionDate': data["TestPlanVersionDate"],
         'DeviationDetails': deviation_details_specific(),
+        'Standards':standards_text_format(data["TestFlow"][report_number]["QP_read_standards_page"]),
         'Test_start': str(data_TT['Test_start']),
         'Test_end': str(data_TT['Test_end']),
         # --------------------------------Third Page---------------------------------------------------------
@@ -191,10 +228,13 @@ def create_report(project_id, report_number):
         'Customer_Function': data["ProjectEngineer"]["Function"],
         'Functional_check': data_TT['Functional_check']
     }
+    add_snipping(data, report_number, info_to_replace)
 
+    # print(info_to_replace)
     # Function which replace template strings with above-mentioned data
     tpl.render(info_to_replace)
-    tpl.save(f'{info_to_replace["header"]}.docx')
+    # Save and create the file in the location and with the name specified between ()
+    tpl.save(f'./Report_output/{info_to_replace["header"]}.docx')
 
 
-create_report("R02074", "2")
+# create_report("R02110", "2") #used only for testing
