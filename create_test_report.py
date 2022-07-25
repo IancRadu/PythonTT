@@ -159,6 +159,7 @@ def create_report(project_id, report_number):
     data_TT = add_test_start_end(data, report_number)
     # Variable used to select the pictures in the folders
     path_to_picture = pathlib.Path(data['PathtoTO']).parent.parent
+    path_to_test_report = f'{path_to_picture}/04_TEST REPORT/'
     path_to_picture_extended = f'{path_to_picture}/02_RAW DATA/{data["TestFlow"][report_number]["TestNo"]}'
     # print(data)
 
@@ -234,7 +235,7 @@ def create_report(project_id, report_number):
     # Function which replace template strings with above-mentioned data
     tpl.render(info_to_replace)
     # Save and create the file in the location and with the name specified between ()
-    tpl.save(f'./Report_output/{info_to_replace["header"]}.docx')
+    tpl.save(f'{path_to_test_report}/01_In work/{info_to_replace["header"]}.docx')
 
 
 # create_report("R02110", "2") #used only for testing

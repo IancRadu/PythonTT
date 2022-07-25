@@ -16,7 +16,7 @@ if "doc_path" not in database.load_database():
 user_answer = int(
     input("What do you want to do? \n 1. Add information from test order to test tracking, create project "
           "folders and get the snipping from QP. \n 2. Create test reports from a previous imported project.\n 3. Exit.\n"))
-print(user_answer)
+# print(user_answer)
 while user_answer != 3:
     if user_answer == 1:
         print(
@@ -58,9 +58,12 @@ while user_answer != 3:
         create_report(project_id, test_number)
         user_answer_report = 'yes'
         while user_answer_report == 'yes':
-            user_answer_report = str(input("Do you want to create a new report? Write yes or no.\n")).lower().strip()
-            test_number = str(input("Write the test number to create another test report. example: 2\n").strip())
-            create_report(project_id, test_number)
+            user_answer_report = str(input("Do you want to create another test report? Write yes or no.\n")).lower().strip()
+            if user_answer_report == 'yes':
+                test_number = str(input("Write the test number to create another test report. example: 2\n").strip())
+                create_report(project_id, test_number)
+            else:
+                continue
         # create_report("R02074", "6") # used for testing
         user_answer = int(
             input("What do you want to do next? \n 1. Add information from test order to test tracking, create project "
