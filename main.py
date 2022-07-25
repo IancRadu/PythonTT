@@ -9,6 +9,20 @@ from TOData import ReadTOData
 import database
 import get_qp_pdf_info
 
+# ---------------------Imports so that pyinstaller works ---------------------------------------------------
+import simplify_docx.iterators.table
+import simplify_docx.iterators.run
+import simplify_docx.iterators.paragraph
+import simplify_docx.iterators
+import simplify_docx.iterators.document
+import simplify_docx.iterators.body
+import simplify_docx
+import os
+
+
+from PyInstaller.utils.hooks import collect_data_files
+datas=collect_data_files('cmudict')
+# ------------------------ end of imports ------------------------------------------------------------------
 # Check if path to documents are available, if not found request them from user.
 if "doc_path" not in database.load_database():
     path_selector()
@@ -21,13 +35,13 @@ while user_answer != 3:
     if user_answer == 1:
         print(
             "Please select the Test Order. This will automatically add your test order information to test tracking and it will "
-            "create folders for each test.")
+            "create folders for each test.\n")
         # Creates a new object from the class ReadTOData
         new_project = ReadTOData()
 
         # Object current_data contain all necessary data from a Test Order and project tracking
         current_data = new_project.get_data()
-        print("Wait for the program to make the necessary changes")
+        print("Wait for the program to make the necessary changes.\n")
         # Create the folder structure based on the information from TO
         new_project.create_folder_structure(current_data)
 

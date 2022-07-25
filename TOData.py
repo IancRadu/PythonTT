@@ -171,7 +171,7 @@ class ReadTOData:
     def get_project_tracking_data(self, project_id):
         # For reading Project Tracking data
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Projects Tracking", header=4)
-        print(f'You have selected Test Order with ID: {project_id}')
+        print(f'You have selected Test Order with ID: {project_id}.\n')
         project_tracking = {
             "BA": read_data[read_data.Column1 == project_id].values[0][6],
             "Phase": read_data[read_data.Column1 == project_id].values[0][11],
@@ -189,7 +189,7 @@ class ReadTOData:
         # print(f"{read_data.loc[18, 'Unique Identification No.']} didnt work")
         try:
             if read_data[read_data["Unique Identification No."] == project_id].values[0][3] == project_id:
-                print(f"{project_id} is already written in test tracking")
+                print(f"{project_id} is already written in test tracking.\n")
         except IndexError:
             # print(f'{len(read_data["Unique Identification No."])}')
             def add_data(index):
