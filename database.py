@@ -12,7 +12,7 @@ def load_database():
         with open("DataBase.json", "w") as data_file:
             data = {}
             json.dump(data, data_file, indent=4)
-            print("New DataBase created")
+            # print("New DataBase created")
             return data
 
 #Function which updates the json file with new data
@@ -27,7 +27,7 @@ def upload_database(new_data):
         with open("DataBase.json", "w") as data_file:
             data = new_data
             json.dump(data, data_file, indent=4)
-            print("New DataBase created")
+            # print("New DataBase created.\n")
             return data
 #Function which check if the current project is in database, if not it will add it
 def database(object):

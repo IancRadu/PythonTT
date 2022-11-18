@@ -7,41 +7,11 @@ import database
 from docx.shared import Mm
 from test_method import test_method
 # Path to the template used
-tpl = DocxTemplate('./Template/TemplateRaport.docx')
+tpl = DocxTemplate('./Template/Test tracking form.docx')
 
 # Assign path to general files to variable
 planning = database.load_database()['doc_path']['planning']
-output_location = database.load_database()['doc_path']['output_location']
 eq_configuration = database.load_database()['doc_path']['eq_configuration']
-
-
-# Function which search for Test start and end date
-def add_test_start_end(data, report_number):
-    read_data = pd.read_excel(output_location, "QL SBZ REL Tests Tracking", header=3)
-    # For reading QL SBZ REL Tests Tracking
-    report = data["TestFlow"][report_number]["TestNo"]
-    try:
-        if read_data[read_data['Test Order/\nReport No.'] == report].values[0][5] == report:
-
-            t_start = str(read_data[read_data['Test Order/\nReport No.'] == report].values[0][10]).replace("00:00:00",
-                                                                                                           "").strip()
-            t_end = str(read_data[read_data['Test Order/\nReport No.'] == report].values[0][12]).replace("00:00:00",
-                                                                                                         "").strip()
-            data_tt = {'Test_start': datetime.datetime.strptime(t_start, "%Y-%m-%d").strftime("%d/%m/%Y"),
-                       'Test_end': datetime.datetime.strptime(t_end, "%Y-%m-%d").strftime("%d/%m/%Y"),
-                       'Functional_check': read_data[read_data['Test Order/\nReport No.'] == report].values[0][16], }
-            return data_tt, print(data_tt['Test_start'])
-        else:
-            print(f"{report_number} not found in test tracking. Check spelling.\n")
-    except IndexError:
-        print("Something went wrong with getting start and end date for tests.\n")
-    except ValueError:
-        print("Value received for start/end date is not a date.\n")
-        data_tt = {'Test_start': 'No start/end date found in Test tracking',
-                   'Test_end': 'No start/end date found in Test tracking',
-                   'Functional_check': read_data[read_data['Test Order/\nReport No.'] == report].values[0][16], }
-        return data_tt
-
 
 #
 def get_chamber_data(data, planning, report_number):
@@ -100,26 +70,6 @@ def get_chamber_data(data, planning, report_number):
     else:
         return sub_function()
 # Search for picture at given path and return path if picture_name is at that path else return first picture.
-def get_picture(path_to_picture_extended, name, picture_name):
-    data = f'{path_to_picture_extended}/{name}/'
-    path = pathlib.Path(data)
-
-    def sub_get_picture():
-
-        for child in path.iterdir():
-
-            if picture_name in str(child):
-                return child
-            elif 'png' or 'jpg' in str(child):
-                print(f"No picture found with name: {picture_name}. First picture in the file was returned.\n")
-                # print(str(child))
-                return child
-
-    if sub_get_picture() is None:
-        print(f"No pictures found in {name}.\n")
-        return './Template/test_setup_dummy.bmp'
-    else:
-        return sub_get_picture()
 
 # Format text read from QP
 def standards_text_format(qp_text):
@@ -147,16 +97,15 @@ def add_snipping(data, report_number, info_to_replace):
                                                                    width=Mm(150), height=Mm(193)),},)
     # print(info_to_replace['Snipping'])
 
-def create_report(project_id, report_number):
+def create_tracking_form(project_id, report_number):
     # Load Project ID information from database
     data = database.load_database()[project_id]
     # Get chamber data information
     chamber_data = get_chamber_data(data, planning, report_number)
     # Format text received after reading qp standard
-
     # print(chamber_data)
     # print(f'Values from climatic chamber are {chamber_data}')
-    data_TT = add_test_start_end(data, report_number)
+
     # Variable used to select the pictures in the folders
     path_to_picture = pathlib.Path(data['PathtoTO']).parent.parent
     path_to_test_report = f'{path_to_picture}/04_TEST REPORT/'
@@ -168,39 +117,19 @@ def create_report(project_id, report_number):
             return data["DeviationDetails"]
         else:
             # print(data["TestFlow"][report_number]["TestDeviation"])
-            return data["TestFlow"][report_number]["TestDeviation"] #'N.A.'
+            return data["TestFlow"][report_number]["TestDeviation"]  # 'N.A.'
     # Data which appear in the Test Report Template
     info_to_replace = {
         # --------------------------------Header------------------------------------------------------------
+        'Test_method': test_method(str(data["TestFlow"][report_number]["Test name"])),
         'header': data["TestFlow"][report_number]["TestNo"],
-        # --------------------------------First_Page---------------------------------------------------------
-        'Customer_name': data["ProjectEngineer"]["Name"],
-        'Customer_phone': data["ProjectEngineer"]["Phone"],
-        'Customer_dep': data["ProjectEngineer"]["Departament"],
-        'EndCustomerOEM': data["EndCustomerOEM"],
-        'ProjectName': data["ProjectName"],
-        'Precompliance': data["TypeOfRequest"]["Pre-compliance"]["Checkbox"][0],
-        'DV': data["TypeOfRequest"]["DV"]["Checkbox"][0],
-        'PV': data["TypeOfRequest"]["PV"]["Checkbox"][0],
-        'ExternalRequest': data["TypeOfRequest"]["ExternalRequest"]["Checkbox"][0],
-        'BeforeGate80': data["TypeOfRequest"]["PV"]["BeforeGate80"][0],
-        'AfterGate80': data["TypeOfRequest"]["PV"]["AfterGate80"][0],
-        'WithPPPAP': data["TypeOfRequest"]["PV"]["WithPPPAP"][0],
-        'WithoutPPAP': data["TypeOfRequest"]["PV"]["WithoutPPAP"][0],
-        'Reason_details': data["TypeOfRequest"]["Reason_details"],
-        'ProjectID': data["ProjectID"],
+
         'SA': data["TestFlow"][report_number]["SampleAmount"],  # Sample Amount
         'SampleIdentification': data["TestFlow"][report_number]["SampleIdentification"],
         # --------------------------------Second Page---------------------------------------------------------
         'Test_name': data["TestFlow"][report_number]["Test name"],
-        'ChaperNo': data["TestFlow"][report_number]["ChaperNo"],
-        'Test_method':test_method(str(data["TestFlow"][report_number]["Test name"])),
-        'TestPlanName': data["TestPlanName"],
-        'TestPlanVersionDate': data["TestPlanVersionDate"],
         'DeviationDetails': deviation_details_specific(),
         'Standards':standards_text_format(data["TestFlow"][report_number]["QP_read_standards_page"]),
-        'Test_start': str(data_TT['Test_start']),
-        'Test_end': str(data_TT['Test_end']),
         # --------------------------------Third Page---------------------------------------------------------
         'Chamber': chamber_data['Chamber'],
         'Temp_system_name': chamber_data['Temp_system_name'],
@@ -215,20 +144,7 @@ def create_report(project_id, report_number):
         'Sensor_inv': chamber_data['Sensor_inv'],
         'Sensor_calib': chamber_data['Sensor_calib'],
         'Sensor_qlsbz': chamber_data['Sensor_qlsbz'],
-        # --------------------------------Fourth Page---------------------------------------------------------
-        'test_setup_picture': InlineImage(tpl, str(get_picture(path_to_picture_extended, '01_Pictures_Before_test',
-                                                               'setup')), width=Mm(80), height=Mm(80)),
-        # --------------------------------Fifth Page---------------------------------------------------------
-        'graph_picture': InlineImage(tpl, './Template/test_setup_dummy.bmp', width=Mm(150),
-                                     height=Mm(63)),
-        'details_picture': InlineImage(tpl, str(get_picture(path_to_picture_extended, '03_Logs', 'details')),
-                                       width=Mm(150), height=Mm(63)),
-        # --------------------------------Last Page---------------------------------------------------------
-        'LTTResponsible_Name': data['LTTResponsible']['Name'],
-        'LTTResponsible_Function': data['LTTResponsible']['Function'],
-        'LTTResponsible_Departament': data['LTTResponsible']['Departament'],
-        'Customer_Function': data["ProjectEngineer"]["Function"],
-        'Functional_check': data_TT['Functional_check']
+
     }
     add_snipping(data, report_number, info_to_replace)
 
@@ -236,7 +152,7 @@ def create_report(project_id, report_number):
     # Function which replace template strings with above-mentioned data
     tpl.render(info_to_replace)
     # Save and create the file in the location and with the name specified between ()
-    tpl.save(f'{path_to_test_report}/01_In work/{info_to_replace["header"]}.docx')
+    tpl.save(f'{pathlib.Path(data["PathtoTO"]).parent}/{info_to_replace["header"]}.docx')
 
 
-# create_report("R02110", "2") #used only for testing
+# create_tracking_form("R02074", "6") #used only for testing
