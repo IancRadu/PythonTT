@@ -2,7 +2,8 @@ import xlwings as xw  # pip install xlwings, to open an excel file and modify it
 import pathlib
 # Used to acces elements found in source word document
 import docx
-from simplify_docx import simplify
+from simplify_docx import simplify #in simplify/docs/iterators/generic i deleted an else which trow a error when a
+# certain element is not found on the page, in order to not appear on the console.
 # pydash ne permite sa accesam o valoare dintr-un dict sau list prin utilizarea . (punctului) pentru cale
 import pydash
 # To get the path of the file
@@ -58,11 +59,11 @@ class ReadTOData:
                                    'N\A'),
                     "TestDeviation": pydash.get(my_doc_as_json,
                                                 f'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.0.VALUE.{i}.VALUE.4.VALUE.0.VALUE.0.VALUE',
-                                                'N\A'),
+                                                'N.A.'),
                     "TestNo":
                         pydash.get(my_doc_as_json,
                                    f'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.0.VALUE.{i}.VALUE.5.VALUE.0.VALUE.0.VALUE',
-                                   'N\A').replace(" ", "").replace("{", "").replace("}", ""), }
+                                   'N\A').replace(" ", "").replace("{", "").replace("}", "").replace("/", "").replace("\\", ""), }
             return test_list
 
         self.project_data = {
@@ -171,12 +172,12 @@ class ReadTOData:
     def get_project_tracking_data(self, project_id):
         # For reading Project Tracking data
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Projects Tracking", header=4)
-        print(f'You have selected Test Order with ID: {project_id}')
+        print(f'You have selected Test Order with ID: {project_id}.\n')
         project_tracking = {
-            "BA": read_data[read_data.Column1 == project_id].values[0][6],
-            "Phase": read_data[read_data.Column1 == project_id].values[0][11],
-            "ValidationEngineer": read_data[read_data.Column1 == project_id].values[0][18],
-            "TestEngineer": read_data[read_data.Column1 == project_id].values[0][19]
+            "BA": read_data[read_data["Unique Identification No. - R"] == project_id].values[0][6],
+            "Phase": read_data[read_data["Unique Identification No. - R"] == project_id].values[0][11],
+            "ValidationEngineer": read_data[read_data["Unique Identification No. - R"] == project_id].values[0][18],
+            "TestEngineer": read_data[read_data["Unique Identification No. - R"] == project_id].values[0][19]
         }
 
         return project_tracking
@@ -189,7 +190,7 @@ class ReadTOData:
         # print(f"{read_data.loc[18, 'Unique Identification No.']} didnt work")
         try:
             if read_data[read_data["Unique Identification No."] == project_id].values[0][3] == project_id:
-                print(f"{project_id} is already written in test tracking")
+                print(f"{project_id} is already written in test tracking.\n")
         except IndexError:
             # print(f'{len(read_data["Unique Identification No."])}')
             def add_data(index):

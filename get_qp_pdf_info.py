@@ -123,10 +123,15 @@ def output_pdf_page(current_data):
     zoom = 2  # to increase the resolution
     mat = fitz.Matrix(zoom, zoom)
     doc = fitz.open(pdffile)
-    for i in range(1,len(current_data["TestFlow"])+1):
-        for m in range(0, len(current_data["TestFlow"][i]['QP_read_pages'])):
-            page = doc.load_page(current_data["TestFlow"][i]['QP_read_pages'][m]-1)  # number of page
-            pix = page.get_pixmap(matrix=mat)
-            output = f"{current_data['TestFlow'][i]['Pathto04_Snipping']}/{current_data['TestFlow'][i]['QP_read_pages'][m]}.png"
-            pix.save(output)
-
+    # print("The pdf was opened")
+    try:
+     for i in range(1, len(current_data["TestFlow"]) + 1):
+            for m in range(0, len(current_data["TestFlow"][i]['QP_read_pages'])):
+                page = doc.load_page(current_data["TestFlow"][i]['QP_read_pages'][m] - 1)  # number of page
+                # print(f"{page}")
+                pix = page.get_pixmap(matrix=mat)
+                output = f"{current_data['TestFlow'][i]['Pathto04_Snipping']}/{current_data['TestFlow'][i]['QP_read_pages'][m]}.png"
+                pix.save(output)
+    except KeyError:
+        print("No snipping could be taken from QP.\n")
+        print(f"Error {KeyError=} found")

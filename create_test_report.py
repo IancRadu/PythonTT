@@ -32,11 +32,11 @@ def add_test_start_end(data, report_number):
                        'Functional_check': read_data[read_data['Test Order/\nReport No.'] == report].values[0][16], }
             return data_tt, print(data_tt['Test_start'])
         else:
-            print(f"{report_number} not found in test tracking. Check spelling")
+            print(f"{report_number} not found in test tracking. Check spelling.\n")
     except IndexError:
-        print("Something went wrong with getting start and end date for tests.")
+        print("Something went wrong with getting start and end date for tests.\n")
     except ValueError:
-        print("Value received for start/end date is not a date")
+        print("Value received for start/end date is not a date.\n")
         data_tt = {'Test_start': 'No start/end date found in Test tracking',
                    'Test_end': 'No start/end date found in Test tracking',
                    'Functional_check': read_data[read_data['Test Order/\nReport No.'] == report].values[0][16], }
@@ -48,7 +48,7 @@ def get_chamber_data(data, planning, report_number):
     # Check equipment planning and return chamber name on which test is planned
     read_data = pd.read_excel(planning, "ENV2020", header=5)
     all_data = read_data.to_dict()
-    print(f'Test report for {data["ProjectID"]}: {data["TestFlow"][report_number]["Test name"]} is being created.')
+    print(f'Test report for {data["ProjectID"]}: {data["TestFlow"][report_number]["Test name"]} is being created.\n')
 
     def sub_function():
 
@@ -81,7 +81,7 @@ def get_chamber_data(data, planning, report_number):
                     continue
 
     if sub_function() is None:
-        print("Name of test was not found in planning")
+        print("Name of test was not found in planning.\n")
         eq_cfg_empty = {'Chamber': "CC??",
                         'Temp_system_name': 'Name of test was not found in planning',
                         'Temp_system_inv': 'Ask Gurghean Radu to  ',
@@ -111,12 +111,12 @@ def get_picture(path_to_picture_extended, name, picture_name):
             if picture_name in str(child):
                 return child
             elif 'png' or 'jpg' in str(child):
-                print(f"No picture found with name: {picture_name}. First picture in the file was returned.")
+                print(f"No picture found with name: {picture_name}. First picture in the file was returned.\n")
                 # print(str(child))
                 return child
 
     if sub_get_picture() is None:
-        print(f"No pictures found in {name}")
+        print(f"No pictures found in {name}.\n")
         return './Template/test_setup_dummy.bmp'
     else:
         return sub_get_picture()
@@ -167,7 +167,8 @@ def create_report(project_id, report_number):
         if str(data["TestFlow"][report_number]["Test name"]) in str(data["DeviationDetails"]):
             return data["DeviationDetails"]
         else:
-            return 'N.A.'
+            # print(data["TestFlow"][report_number]["TestDeviation"])
+            return data["TestFlow"][report_number]["TestDeviation"] #'N.A.'
     # Data which appear in the Test Report Template
     info_to_replace = {
         # --------------------------------Header------------------------------------------------------------

@@ -5,7 +5,7 @@ def test_method(test_name):
         "Test B: Dry Heat": [["IEC 60068-2-2", "2007-07"],["high temperature operation","high temperature storage","high temperature operation","lts","warm temperature","Warm Storage","CL/03","Warm Operation","CL/08"]],
         "Test Na: Rapid change of temperature with prescribed time of transfer": [["IEC 60068-2-14", "2009-01"],['RAPID CHANGE OF TEMPERATURE WITH SPECIFIED TRANSITION DURATION','Thermal Shock','CL/01','Thermal Shocks Pre-Aging','CL/02']],
         "Test Nb: Change of temperature with specified rate of change": [["IEC 60068-2-14", "2009-01"],['TEMPERATURE CYCLING WITH SPECIFIED CHANGE RATE','TEMPERATURE CYCLING WITH SPECIFIED TEMPERATURE CHANGE RATE','LT/01','Thermal Cycling']],
-        "Temperature Step test": [["ISO 16750 – 4", "2010-04"],['TEMPERATURE STEPS TEST','TEMPERATURE STEP test','Temperature range step','Temperature range','TEMPERATURE STEP','TEMPERATURE STEPS','CL/07']],
+        "Temperature Step test": [["ISO 16750 – 4", "2010-04"],['TEMPERATURE STEPS TEST','TEMPERATURE STEP test','Temperature range step','Temperature range','TEMPERATURE STEP','Step Temperature Test','TEMPERATURE STEPS','CL/07']],
         "Ice water shock test": [["ISO 16750 – 4", "2010-04"],['Ice water shock','IWS']],
         "Test Db: Damp heat, cyclic (12 h + 12 h cycle)":[["IEC 60068-2-30","2005-08"],['0']],
         "Test Z/AD: Composite temperature/humidity cyclic test": [["IEC 60068-2-38", "2021-03"],['COMPOSITE TEMPERATURE/HUMIDITY CYCLIC TEST','COMPOSITE TEMPERATURE/ HUMIDITY CYCLE TEST','Climatic sequence','CL/06']],

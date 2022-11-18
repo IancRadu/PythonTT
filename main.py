@@ -9,25 +9,40 @@ from TOData import ReadTOData
 import database
 import get_qp_pdf_info
 
+# ---------------------Imports so that pyinstaller works ---------------------------------------------------
+import simplify_docx.iterators.table
+import simplify_docx.iterators.run
+import simplify_docx.iterators.paragraph
+import simplify_docx.iterators
+import simplify_docx.iterators.document
+import simplify_docx.iterators.body
+import simplify_docx
+import os
+
+from PyInstaller.utils.hooks import collect_data_files
+print(" Version 1.01. Contact information: Radu.Nicolae.Ianc@continental-corporation.com\n")
+# datas=collect_data_files('cmudict') # necessary import for pyinstaller
+# ------------------------ end of imports ------------------------------------------------------------------
 # Check if path to documents are available, if not found request them from user.
 if "doc_path" not in database.load_database():
     path_selector()
 
 user_answer = int(
     input("What do you want to do? \n 1. Add information from test order to test tracking, create project "
-          "folders and get the snipping from QP. \n 2. Create test reports from a previous imported project.\n 3. Exit.\n"))
+          "folders and get the snipping from QP. \n 2. Create test tracking form from a previous imported project.\n"
+          " 3. Create test reports from a previous imported project.\n 4. Exit.\n"))
 # print(user_answer)
-while user_answer != 3:
+while user_answer != 4:
     if user_answer == 1:
         print(
             "Please select the Test Order. This will automatically add your test order information to test tracking and it will "
-            "create folders for each test.")
+            "create folders for each test.\n")
         # Creates a new object from the class ReadTOData
         new_project = ReadTOData()
 
         # Object current_data contain all necessary data from a Test Order and project tracking
         current_data = new_project.get_data()
-        print("Wait for the program to make the necessary changes")
+        print("Wait for the program to make the necessary changes.\n")
         # Create the folder structure based on the information from TO
         new_project.create_folder_structure(current_data)
 
@@ -45,8 +60,33 @@ while user_answer != 3:
         new_project.complete_test_tracking(current_data["ProjectID"])
         user_answer = int(
             input("What do you want to do next? \n 1. Add information from test order to test tracking, create project "
-                  "folders and get the snipping from QP. \n 2. Create test reports from a previous imported project.\n 3. Exit.\n"))
+                  "folders and get the snipping from QP. \n 2. Create test tracking form from a previous imported project.\n"
+                  " 3. Create test reports from a previous imported project.\n 4. Exit.\n"))
     elif user_answer == 2:
+        # Function to create Test Report, input project id and number of test report.
+        from create_test_tracking_form import create_tracking_form
+
+        project_id = str(
+            input("To create a test tracking form first you need to write the Project ID. example: R02110\n")).strip().upper()
+        if len(project_id) != 6:
+            project_id = input("Write a valid project ID number\n").strip().upper()
+        test_number = input("Secondly you need to write the test number. example: 2\n").strip()
+        create_tracking_form(project_id, test_number)
+        user_answer_report = 'yes'
+        while user_answer_report == 'yes':
+            user_answer_report = str(
+                input("Do you want to create another test tracking form? Write yes or no.\n")).lower().strip()
+            if user_answer_report == 'yes':
+                test_number = str(input("Write the test number to create another test tracking form. example: 2\n").strip())
+                create_report(project_id, test_number)
+            else:
+                continue
+        # create_report("R02074", "6") # used for testing
+        user_answer = int(
+            input("What do you want to do next? \n 1. Add information from test order to test tracking, create project"
+                  "folders and get the snipping from QP. \n 2. Create test tracking form from a previous imported project.\n"
+                  " 3. Create test reports from a previous imported project.\n 4. Exit.\n"))
+    elif user_answer == 3:
         # Function to create Test Report, input project id and number of test report.
         from create_test_report import create_report
 
@@ -58,7 +98,8 @@ while user_answer != 3:
         create_report(project_id, test_number)
         user_answer_report = 'yes'
         while user_answer_report == 'yes':
-            user_answer_report = str(input("Do you want to create another test report? Write yes or no.\n")).lower().strip()
+            user_answer_report = str(
+                input("Do you want to create another test report? Write yes or no.\n")).lower().strip()
             if user_answer_report == 'yes':
                 test_number = str(input("Write the test number to create another test report. example: 2\n").strip())
                 create_report(project_id, test_number)
@@ -66,5 +107,7 @@ while user_answer != 3:
                 continue
         # create_report("R02074", "6") # used for testing
         user_answer = int(
-            input("What do you want to do next? \n 1. Add information from test order to test tracking, create project "
-                  "folders and get the snipping from QP. \n 2. Create test reports from a previous imported project.\n 3. Exit.\n"))
+            input("What do you want to do next? \n 1. Add information from test order to test tracking, create project"
+                  "folders and get the snipping from QP. \n 2. Create test tracking form from a previous imported "
+                  "project.\n "
+                  " 3. Create test reports from a previous imported project.\n 4. Exit.\n"))
