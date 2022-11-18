@@ -1,20 +1,25 @@
 {
-    "R02074": {
-        "ProjectID": "R02074",
-        "ProjectName": "CCN S2 Asia_VOL_SPA2_22_TCM_TRM",
-        "EndCustomerOEM": "VOLVO CAR CORPORATION",
-        "DG Number": "064139",
+    "doc_path": {
+        "eq_configuration": "C:\\Users\\iancr\\OneDrive - Continental AG\\JavaScript Projects\\Python_TT\\EQ_configuration.xlsx",
+        "planning": "C:\\Users\\iancr\\OneDrive - Continental AG\\TRApp\\A-13 Planning\\CAP1013201-F13 Equipment Planning_20210222.xlsx",
+        "output_location": "C:\\Users\\iancr\\OneDrive - Continental AG\\JavaScript Projects\\Python_TT\\CA 1014449-A13 QL SBZ REL Projects and Tests Tracking Overview.xlsx"
+    },
+    "R02110": {
+        "ProjectID": "R02110",
+        "ProjectName": "VOLVO RE-DESIGN",
+        "EndCustomerOEM": "VOLVO",
+        "DG Number": "DG-080683",
         "ProjectEngineer": {
-            "Name": "Arsene Catalina",
-            "Function": "QMP",
-            "Departament": "VNI CCN",
-            "Phone": "N\\A"
+            "Name": "Adina Zaharov",
+            "Function": "Qualification engineer",
+            "Departament": "VNI CVS AE AS6 LCU EMEA ST T7",
+            "Phone": "+40 332 630 506"
         },
         "LTTResponsible": {
-            "Name": "Srdjan Struharik",
-            "Function": "SyTEE",
-            "Departament": "VNI CE SYS EU2 NVS GD2",
-            "Phone": "+381 21 2157233"
+            "Name": "Vlad Florea",
+            "Function": "LTTs Responsible",
+            "Departament": "VNI CVS AE AS6 LCU EMEA ST T7",
+            "Phone": "vlad-sorin.florea@continental-corporation.com"
         },
         "TypeOfRequest": {
             "Pre-compliance": {
@@ -36,11 +41,11 @@
                     "PV"
                 ],
                 "BeforeGate80": [
-                    "1",
+                    "0",
                     " - Before Gate 80"
                 ],
                 "AfterGate80": [
-                    "0",
+                    "1",
                     " - After Gate 80"
                 ],
                 "WithPPPAP": [
@@ -48,7 +53,7 @@
                     " With PPAP change"
                 ],
                 "WithoutPPAP": [
-                    "0",
+                    "1",
                     " Without PPAP change"
                 ]
             },
@@ -58,148 +63,56 @@
                     "External  request"
                 ]
             },
-            "Reason/details": " Casual",
-            "Result": "Add_Function_To_Get_qualification_phase"
+            "Reason_details": ""
         },
-        "TestPlanName": "_ENV_VOL_SPA2_22_TCM_TRM_V1.6.1.pd",
-        "TestPlanVersionDate": "14 June 2021",
+        "TestPlanName": "OC1000002Axx-xx_VOL-F-LCU_-D-HCM1-RE-DESIGN_ENV Qualification Test Plan for PV_V1.1",
+        "TestPlanVersionDate": "Flow / Test matrix: OC1000002Axx-xx_VOL-F-LCU_-D-HCM1-RE-DESIGN_ENV Qualification Test Plan for PV",
         "TestFlow": {
             "1": {
-                "Test name": "High temperature storage",
-                "ChaperNo": "3",
+                "Test name": "MECHANICAL SHOCK",
+                "ChaperNo": "4.3",
                 "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV06",
+                "SampleIdentification": "S1, S2, S3, S4, S5, S6",
                 "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-01"
+                "TestNo": "R02110-SBZ-01",
+                "Pathto01_Pictures_Before_test": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-01\\01_Pictures_Before_test",
+                "Pathto02_Pictures_After_test": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-01\\02_Pictures_After_test",
+                "Pathto03_Logs": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-01\\03_Logs",
+                "Pathto04_Snipping": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-01\\04_Snipping",
+                "QP_read_standards_page": [
+                    ":  ISO 16750 -3\u2013 Section 4 .2.2  \n       IEC 60068 -2-27 Ea  \n"
+                ],
+                "QP_read_pages": [
+                    53,
+                    54
+                ]
             },
             "2": {
-                "Test name": "Temperature cycling with specified temperature change rate",
-                "ChaperNo": "4",
+                "Test name": "TEMPERATURE STEP TEST",
+                "ChaperNo": "3.7",
                 "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV06",
+                "SampleIdentification": "S7, S8, S9, S10, S11, S12",
                 "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-02"
-            },
-            "3": {
-                "Test name": "Rapid change of temperature with specified transition duration",
-                "ChaperNo": "5",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV06",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-03"
-            },
-            "4": {
-                "Test name": "Random and sinusoidal vibrations and temperature cycling",
-                "ChaperNo": "6",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV05",
-                "TestDeviation": "in operated mode, ENV01-05, ENV06 non operated",
-                "TestNo": "R02074-{SBZ}-04"
-            },
-            "5": {
-                "Test name": "Composite temperature/ humidity cycle test",
-                "ChaperNo": "7",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV05",
-                "TestDeviation": "in operated mode, ENV01-05, ENV06 non operated",
-                "TestNo": "R02074-{SBZ}-05"
-            },
-            "6": {
-                "Test name": "Damp heat, steady state",
-                "ChaperNo": "8",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV05",
-                "TestDeviation": "in operated mode, ENV01-05, ENV06 non operated",
-                "TestNo": "R02074-{SBZ}-06"
-            },
-            "7": {
-                "Test name": "Low temperature storage",
-                "ChaperNo": "9",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV01-ENV06",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-07"
-            },
-            "8": {
-                "Test name": "Low temperature operation",
-                "ChaperNo": "10",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV12",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-08"
-            },
-            "9": {
-                "Test name": "High temperature operation",
-                "ChaperNo": "11",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV12",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-09"
-            },
-            "10": {
-                "Test name": "Temperature steps test",
-                "ChaperNo": "12",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV12",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-10"
-            },
-            "11": {
-                "Test name": "Mechanical shock test",
-                "ChaperNo": "13",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV11",
-                "TestDeviation": "in operated mode, ENV07-11, ENV12 non operated",
-                "TestNo": "R02074-{SBZ}-11"
-            },
-            "12": {
-                "Test name": "Drop test",
-                "ChaperNo": "14",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV12",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-12"
-            },
-            "13": {
-                "Test name": "Connector pins push/pull",
-                "ChaperNo": "15",
-                "SampleAmount": "6",
-                "SampleIdentification": "ENV07-ENV12",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-13"
-            },
-            "14": {
-                "Test name": "Chemical loads",
-                "ChaperNo": "16",
-                "SampleAmount": "8",
-                "SampleIdentification": "ENV07-ENV14",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-14"
-            },
-            "15": {
-                "Test name": "IP -Protection Against Foreign Objects",
-                "ChaperNo": "17",
-                "SampleAmount": "8",
-                "SampleIdentification": "ENV07-ENV14",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-15"
-            },
-            "16": {
-                "Test name": "IP -Water intrusion",
-                "ChaperNo": "18",
-                "SampleAmount": "8",
-                "SampleIdentification": "ENV07-ENV14",
-                "TestDeviation": "N\\A",
-                "TestNo": "R02074-{SBZ}-16"
+                "TestNo": "R02110-SBZ-02",
+                "Pathto01_Pictures_Before_test": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-02\\01_Pictures_Before_test",
+                "Pathto02_Pictures_After_test": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-02\\02_Pictures_After_test",
+                "Pathto03_Logs": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-02\\03_Logs",
+                "Pathto04_Snipping": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\02_RAW DATA\\R02110-SBZ-02\\04_Snipping",
+                "QP_read_standards_page": "Failed to read standards.",
+                "QP_read_pages": [
+                    37,
+                    38
+                ]
             }
         },
-        "DeviationDetails": ": For Rapid change of temperature with specified transition duration test please use 75 min for each temperature (T min, T max) . Test duration will be 75min*200 cycles *2 = 30000min ; 30.000min /60 min =500 h; 500h/24h =20.83days;",
+        "DeviationDetails": "N.A.",
         "ProjectTrackingData": {
-            "BA": "VNI",
-            "Phase": "PV",
-            "ValidationEngineer": "Roxana M.",
-            "TestEngineer": "Radu I."
+            "BA": "N.A",
+            "Phase": "dPV",
+            "ValidationEngineer": "Oana L.",
+            "TestEngineer": "TBD."
         },
-        "PathtoTO": "C:\\Users\\iancr\\OneDrive - Continental AG\\JavaScript Projects\\Python_TT\\R02074_17_06_2022_Volvo SPA2 .docx"
+        "PathtoTO": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\04_R02110_Requalification (SBZ)\\01_TEST ORDERS\\R02110-05.04.2022.docx",
+        "PathToQP": "C:\\Users\\iancr\\OneDrive - Continental AG\\04_Project_Divisions\\OSRAM\\VNI-CCN\\ECU\\Volvo-Geely\\01_Volvo_HCM\\01_SPECIFICATION\\01_QP\\11_R02110\\OC1000002Axx-xx_VOL-F-LCU_-D-HCM1-RE-DESIGN_ENV Qualification Test Plan for PV_V1.1_16.06.2021.pdf"
     }
 }

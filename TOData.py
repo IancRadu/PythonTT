@@ -3,13 +3,13 @@ import pathlib
 # Used to acces elements found in source word document
 import docx
 from simplify_docx import simplify
-# pydash ne permite sa accesam o valoare dintr-un dict sau list priun utilizarea . (punctului) pentru cale
+# pydash ne permite sa accesam o valoare dintr-un dict sau list prin utilizarea . (punctului) pentru cale
 import pydash
 # To get the path of the file
 from tkinter import filedialog
 # To read data from xslx file
 import pandas as pd
-
+import database
 
 class ReadTOData:
 
@@ -18,7 +18,7 @@ class ReadTOData:
         self.path = pathlib.PureWindowsPath(filedialog.askopenfile().name)
         # self.path ='./R03908_20220607_V02.docx' #TODO change with good one later from above
         self.test_order_file_name = pathlib.PurePath(self.path).name
-        self.output_location = './CA 1014449-A13 QL SBZ REL Projects and Tests Tracking Overview.xlsx'  # TODO change with good one later
+        self.output_location = database.load_database()['doc_path']['output_location']
         # print(current_data)
 
         self.project_data = {}
@@ -30,7 +30,8 @@ class ReadTOData:
         # coerce to JSON using the standard options
         my_doc_as_json = simplify(my_doc)
 
-        print(my_doc_as_json)
+        # print(my_doc_as_json) # All the data read from Test Order
+
         # get location of all important values from my_doc_as_json using http://jsonviewer.stack.hu/
 
         def get_test():
@@ -61,7 +62,7 @@ class ReadTOData:
                     "TestNo":
                         pydash.get(my_doc_as_json,
                                    f'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.0.VALUE.{i}.VALUE.5.VALUE.0.VALUE.0.VALUE',
-                                   'N\A').replace(" ", ""), }
+                                   'N\A').replace(" ", "").replace("{", "").replace("}", ""), }
             return test_list
 
         self.project_data = {
@@ -128,15 +129,17 @@ class ReadTOData:
                         pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A'),
                         pydash.get(
                             my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.6.VALUE.1.VALUE.0.VALUE.1.VALUE', 'N\A').strip(
-                            " ")]},"Reason/details":pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE', 'N\A').replace('Reason/details:',''),"Result":"Add_Function_To_Get_qualification_phase"},
-            "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').strip(
-                "TestPlanName : Test Plan (Qualification Program / Test Specification):"),
+                            " ")]},
+                "Reason_details": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.7.VALUE.1.VALUE.0.VALUE.0.VALUE',
+                                            '').replace('Reason/details:', ''),},
+            "TestPlanName": pydash.get(my_doc_as_json, 'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.0.VALUE.0.VALUE').replace(
+                'Test Plan (Qualification Program / Test Specification):', ' ').strip(),
             "TestPlanVersionDate": pydash.get(my_doc_as_json,
                                               'VALUE.0.VALUE.3.VALUE.16.VALUE.0.VALUE.2.VALUE.0.VALUE').strip(
                 ": Test Plan version date: "),
             "TestFlow": get_test(),
             "DeviationDetails": pydash.get(my_doc_as_json,
-                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE','N/A').strip(
+                                           'VALUE.0.VALUE.3.VALUE.18.VALUE.0.VALUE.1.VALUE.0.VALUE', 'N.A.').strip(
                 "Deviation details"),
             "ProjectTrackingData": self.get_project_tracking_data(
                 pydash.get(my_doc_as_json, 'VALUE.0.VALUE.1.VALUE.0.VALUE', f'{self.test_order_file_name[0:6]}')),
@@ -158,7 +161,7 @@ class ReadTOData:
             for i in range(0, len(folder_names)):
                 pathlib.Path(f'{self.path.parent.parent}\\02_RAW DATA\\{name}\\{folder_names[i]}').mkdir(parents=True,
                                                                                                          exist_ok=True)
-
+                self.project_data["TestFlow"][key][f"Pathto{folder_names[i]}"] = f'{self.path.parent.parent}\\02_RAW DATA\\{name}\\{folder_names[i]}'
         for key in project_data["TestFlow"]:
             if project_data["ProjectID"] in project_data["TestFlow"][key]["TestNo"]:
                 create_folders(project_data["TestFlow"][key]["TestNo"])
@@ -168,13 +171,13 @@ class ReadTOData:
     def get_project_tracking_data(self, project_id):
         # For reading Project Tracking data
         read_data = pd.read_excel(self.output_location, "QL SBZ REL Projects Tracking", header=4)
-        print(project_id)
+        print(f'You have selected Test Order with ID: {project_id}')
         project_tracking = {
             "BA": read_data[read_data.Column1 == project_id].values[0][6],
             "Phase": read_data[read_data.Column1 == project_id].values[0][11],
             "ValidationEngineer": read_data[read_data.Column1 == project_id].values[0][18],
             "TestEngineer": read_data[read_data.Column1 == project_id].values[0][19]
-            }
+        }
 
         return project_tracking
 
@@ -203,7 +206,7 @@ class ReadTOData:
                     wb.sheets["QL SBZ REL Tests Tracking"][
                         f'F{index + 5}'].value = f'{self.project_data["ProjectID"]}{self.project_data["TestFlow"][key]["TestNo"]}'
                 wb.sheets["QL SBZ REL Tests Tracking"][f'G{index + 5}'].value = \
-                self.project_data["ProjectTrackingData"]["Phase"]
+                    self.project_data["ProjectTrackingData"]["Phase"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'H{index + 5}'].value = self.project_data["TestFlow"][key][
                     "Test name"]
                 wb.sheets["QL SBZ REL Tests Tracking"][f'I{index + 5}'].value = \
@@ -235,4 +238,3 @@ class ReadTOData:
                     wb.close()
                     return "Test tracking done"
                 # break
-
