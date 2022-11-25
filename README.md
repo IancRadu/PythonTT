@@ -1,5 +1,5 @@
 # PythonTT
-A tool used to automate work process. Takes data from multiple files(excel,word,pdf) and add then to different word and excel files.  
+A tool used to automate work process. Takes data from multiple files(excel,word,pdf) and add them to different word and excel files.  
 
 Features:
 - Copy/Read/Write data from excel 
